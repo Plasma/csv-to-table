@@ -11,7 +11,8 @@
 	],
 	"activationEvents": [
 		"onCommand:extension.csv-to-table.csv",
-		"onCommand:extension.csv-to-table.tsv"
+		"onCommand:extension.csv-to-table.tsv",
+		"onCommand:extension.csv-to-table.psv"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -22,6 +23,9 @@
 			}, {
 				"command": "extension.csv-to-table.tsv",
 				"title": "Convert to table from TSV (.tsv / tabs)"
+			}, {
+				"command": "extension.csv-to-table.psv",
+				"title": "Convert to table from PSV (.psv / pipes)"
 			}
 		]
 	},

@@ -8,6 +8,7 @@ import { sep } from 'path';
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(registerCsvToTableCommand(',', 'extension.csv-to-table.csv'));
 	context.subscriptions.push(registerCsvToTableCommand('\t', 'extension.csv-to-table.tsv'));
+	context.subscriptions.push(registerCsvToTableCommand('|', 'extension.csv-to-table.psv'));
 }
 
 function registerCsvToTableCommand(separator: string, commandName: string): vscode.Disposable {
