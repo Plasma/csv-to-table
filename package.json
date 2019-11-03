@@ -1,8 +1,9 @@
 {
 	"name": "csv-to-table",
-	"displayName": "csv-to-table",
-	"description": "",
-	"version": "0.0.1",
+	"displayName": "CSV to Table",
+	"publisher": "phplasma",
+	"description": "Convert a CSV/TSV/PSV file to an ASCII formatted table",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.39.0"
 	},
