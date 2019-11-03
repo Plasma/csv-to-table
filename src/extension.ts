@@ -237,6 +237,7 @@ export class CsvParser
 		let startingPosition = this._position;
 		let isInQuote = false;
 		let didTerminateRecord = false;
+		let value = '';
 
 		// Read character sequence
 		for(; this._position < this._text.length; this._position++) {
@@ -249,7 +250,6 @@ export class CsvParser
 			// Is this column value quoted?
 			if (startingPosition === this._position && isQuote) {
 				isInQuote = true;
-				startingPosition++;
 				continue;
 			}
 
@@ -262,16 +262,24 @@ export class CsvParser
 				break;
 			}
 
+			// Skip past an escaped quote?
+			if (isInQuote && isQuote && nextChar === '"') {
+				// Append single (un-escaped from double) quote
+				// Then advanced past our escaped quote value
+				value += char;
+				this._position++;
+				continue;
+			}
+		
+
 			// Or, have we closed our quoted value?
-			if (isInQuote && isQuote) {
+			if (isInQuote && isQuote && nextChar !== '"') {
 				break;
 			}
 
 			// Otherwise, continue reading column value
+			value += char;
 		}
-
-		// Return our new Column Value
-		const value = this._text.substr(startingPosition, this._position - startingPosition);
 
 		// Read past the upcoming separator characgter
 		if (this.readPastSeparatorCharacter()) {

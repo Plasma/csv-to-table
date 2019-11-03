@@ -27,6 +27,44 @@ suite('Extension Test Suite', () => {
 		assert.equal("3", columns[2].getValue());
 	});
 
+	test('Can parse double quoted value', () => {
+		// Arrange
+		const parser = new ext.CsvParser('1,"This is a ""quoted"" word",3', ',');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(1, records.length);
+		assert.equal(3, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal('This is a "quoted" word', columns[1].getValue());
+		assert.equal("3", columns[2].getValue());
+	});
+
+	test('Can parse repeated double quoted value', () => {
+		// Arrange
+		const parser = new ext.CsvParser('1,"This is a """"quoted"""""" word",3', ',');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(1, records.length);
+		assert.equal(3, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal('This is a ""quoted""" word', columns[1].getValue());
+		assert.equal("3", columns[2].getValue());
+	});
+
 	test('Can parse quoted value CSV', () => {
 		// Arrange
 		const parser = new ext.CsvParser('1,"hello world","with a, comma"', ',');
