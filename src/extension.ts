@@ -11,6 +11,11 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(registerCsvToTableCommand('|', 'extension.csv-to-table.psv'));
 }
 
+/**
+ * Helper method to register different commands
+ * @param separator Separator to register
+ * @param commandName Name of the command we are registering
+ */
 function registerCsvToTableCommand(separator: string, commandName: string): vscode.Disposable {
 	let disposable = vscode.commands.registerCommand(commandName, function () {
 		// Get the active text editor
@@ -48,6 +53,9 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
+/**
+ * Class resposible for rendering a provided list of CsvRecord's into an ASCII table
+ */
 class TableWriter
 {
 	/**
@@ -91,6 +99,10 @@ class TableWriter
 		return result;
 	}
 
+	/**
+	 * Returns a CsvRecord that is suitable as a row separator
+	 * @param columnLengths Column length map
+	 */
 	private buildSeparatorRecord(columnLengths: any[]): CsvRecord {
 		const record = new CsvRecord();
 
@@ -104,6 +116,11 @@ class TableWriter
 		return record;
 	}
 
+	/**
+	 * Repeat the provided character N times
+	 * @param char The character to repeat
+	 * @param repeat Number of occurrances
+	 */
 	private getRepeatedChar(char: string, repeat: number): string {
 		let result = '';
 
@@ -114,6 +131,12 @@ class TableWriter
 		return result;
 	}
 
+	/**
+	 * Return a string representation of the provided Record
+	 * @param record The record to be formatted
+	 * @param columnLengths Column length map
+	 * @param useValuePadding Whether we are using value padding
+	 */
 	private getFormattedRecord(record: CsvRecord, columnLengths: any[], useValuePadding: boolean): string {
 		const columns = record.getColumns();
 		const ValuePadding = useValuePadding ? ' ' : '';
@@ -155,6 +178,10 @@ class TableWriter
 		return result;
 	}
 
+	/**
+	 * Calculate the maximum column lengths based on the provided Record set
+	 * @param records Record data to analyze
+	 */
 	private getColumnLengths(records: CsvRecord[]): any[] {
 		// Calculate column lengths
 		let columnLengths = [];
@@ -175,6 +202,9 @@ class TableWriter
 	}
 }
 
+/**
+ * Parser that takes a string input and parsers it into a list of CsvRecord's that contain CsvColumn's
+ */
 export class CsvParser
 {
 	private _text: string;
@@ -191,6 +221,10 @@ export class CsvParser
 		this._position = 0;
 	}
 
+	/**
+	 * Ensures the provided text ends with a new line
+	 * @param text The processed text
+	 */
 	private ensureEndOfRecord(text: string): string {
 		if (!this.isNewLine(text[text.length - 1])) {
 			text += '\r\n';
@@ -199,10 +233,16 @@ export class CsvParser
 		return text;
 	}
 
+	/**
+	 * Determines if we have reached the end of the input data
+	 */
 	private isEof(): boolean {
 		return this._position >= this._text.length;
 	}
 
+	/**
+	 * Parse the provided text and emit the parsed CsvRecords
+	 */
 	public getRecords(): CsvRecord[] {
 		let records: CsvRecord[] = [];
 		let currentRecord: CsvRecord = new CsvRecord();
@@ -226,15 +266,11 @@ export class CsvParser
 		return records;
 	}
 
+	/**
+	 * Peek at the current character in the input without advancing the position
+	 */
 	private peekChar(): string {
 		return this._text.substr(this._position, 1);
-	}
-
-	private readChar(): string {
-		const char = this.peekChar();
-		this._position++;
-
-		return char;
 	}
 
 	/**
@@ -300,10 +336,18 @@ export class CsvParser
 		return new CsvColumnResult(column, didTerminateRecord);
 	}
 
+	/**
+	 * Determine if the provided character appears to be a newline character
+	 * @param char The character to check
+	 */
 	private isNewLine(char: string): boolean {
 		return char === '\r' || char === '\n';
 	}
 	
+	/**
+	 * Determine if the provided character appears to be a separator character
+	 * @param char The character to check
+	 */
 	private isSeparator(char: string): boolean {
 		return char === this._separator;
 	}
@@ -359,6 +403,9 @@ export class CsvParser
 	}
 }
 
+/**
+ * Wrapper class around CsvColumn that also indicates whether the current Record has completed
+ */
 class CsvColumnResult
 {
 	private _column: CsvColumn;
@@ -369,15 +416,24 @@ class CsvColumnResult
 		this._didTerminateRecord = didTerminateRecord;
 	}
 
+	/**
+	 * Return the CsvColumn value
+	 */
 	public getColumn(): CsvColumn {
 		return this._column;
 	}
 
+	/**
+	 * Return whether the column also terminated the current CsvRecord
+	 */
 	public getDidTerminateRecord(): boolean {
 		return this._didTerminateRecord;
 	}
 }
 
+/**
+ * Represents a column value in a CsvRecord
+ */
 class CsvColumn
 {
 	private _value: string;
@@ -386,19 +442,32 @@ class CsvColumn
 		this._value = value;
 	}
 
+	/**
+	 * Return the value of this column
+	 */
 	public getValue(): string {
 		return this._value;
 	}
 }
 
+/**
+ * Represents a record in a CSV/TSV/PSV file
+ */
 class CsvRecord
 {
 	private _columns: CsvColumn[] = [];
 
+	/**
+	 * Add the provided column to the Record
+	 * @param column The column to add
+	 */
 	public addColumn(column: CsvColumn) {
 		this._columns.push(column);
 	}
 
+	/**
+	 * Return the list of available columns for this Record
+	 */
 	public getColumns(): CsvColumn[] {
 		return this._columns;
 	}
