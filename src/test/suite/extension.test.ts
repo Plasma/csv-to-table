@@ -3,14 +3,14 @@ import * as assert from 'assert';
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
-import * as ext from '../../extension';
+import CsvParser from '../../CsvParser';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
 	test('Can handle blank value in last column', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1,', ',');
+		const parser = new CsvParser('1,', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -28,7 +28,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can handle blank value in last column in two record CSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser("1,\r\n3,4", ',');
+		const parser = new CsvParser("1,\r\n3,4", ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -46,7 +46,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can handle blank value in first column', () => {
 		// Arrange
-		const parser = new ext.CsvParser(',2', ',');
+		const parser = new CsvParser(',2', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -64,7 +64,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can handle blank value in middle column', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1,,3', ',');
+		const parser = new CsvParser('1,,3', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -83,7 +83,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse simple CSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1,2,3', ',');
+		const parser = new CsvParser('1,2,3', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -102,7 +102,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse simple PSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1|2|3', '|');
+		const parser = new CsvParser('1|2|3', '|');
 
 		// Act
 		const records = parser.getRecords();
@@ -121,7 +121,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse simple TSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser("1\t2\t3", '\t');
+		const parser = new CsvParser("1\t2\t3", '\t');
 
 		// Act
 		const records = parser.getRecords();
@@ -140,7 +140,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse simple TSV and commas', () => {
 		// Arrange
-		const parser = new ext.CsvParser("1\tshould,be,ignored\t3", '\t');
+		const parser = new CsvParser("1\tshould,be,ignored\t3", '\t');
 
 		// Act
 		const records = parser.getRecords();
@@ -159,7 +159,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse double quoted value', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1,"This is a ""quoted"" word",3', ',');
+		const parser = new CsvParser('1,"This is a ""quoted"" word",3', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -178,7 +178,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse repeated double quoted value', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1,"This is a """"quoted"""""" word",3', ',');
+		const parser = new CsvParser('1,"This is a """"quoted"""""" word",3', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -197,7 +197,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse quoted value CSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1,"hello world","with a, comma"', ',');
+		const parser = new CsvParser('1,"hello world","with a, comma"', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -216,7 +216,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse single column CSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser('1', ',');
+		const parser = new CsvParser('1', ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -233,7 +233,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can interpret new line in quoted column as value', () => {
 		// Arrange
-		const parser = new ext.CsvParser("\"first\r\ncolumn\",second column", ',');
+		const parser = new CsvParser("\"first\r\ncolumn\",second column", ',');
 
 		// Act
 		const records = parser.getRecords();
@@ -251,7 +251,7 @@ suite('Extension Test Suite', () => {
 
 	test('Can parse multi-line CSV', () => {
 		// Arrange
-		const parser = new ext.CsvParser("a,b\r\nc,\"quoted\"", ',');
+		const parser = new CsvParser("a,b\r\nc,\"quoted\"", ',');
 
 		// Act
 		const records = parser.getRecords();
