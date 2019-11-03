@@ -8,6 +8,42 @@ import * as ext from '../../extension';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	test('Can handle blank value in last column', () => {
+		// Arrange
+		const parser = new ext.CsvParser('1,', ',');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(1, records.length);
+		assert.equal(2, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal("", columns[1].getValue());
+	});
+
+	test('Can handle blank value in last column in two record CSV', () => {
+		// Arrange
+		const parser = new ext.CsvParser("1,\r\n3,4", ',');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(2, records.length);
+		assert.equal(2, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal("", columns[1].getValue());
+	});
+
 	test('Can handle blank value in first column', () => {
 		// Arrange
 		const parser = new ext.CsvParser(',2', ',');

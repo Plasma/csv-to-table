@@ -185,9 +185,17 @@ export class CsvParser
 	 * @param text The text to be parsed
 	 */
 	constructor(text: string, separator: string) {
-		this._text = text;
+		this._text = this.ensureEndOfRecord(text);
 		this._separator = separator;
 		this._position = 0;
+	}
+
+	private ensureEndOfRecord(text: string): string {
+		if (!this.isNewLine(text[text.length - 1])) {
+			text += '\r\n';
+		}
+
+		return text;
 	}
 
 	private isEof(): boolean {
@@ -208,7 +216,7 @@ export class CsvParser
 			currentRecord.addColumn(columnResult.getColumn());
 
 			// Start new record?
-			if (columnResult.getDidTerminateRecord()) {
+			if (columnResult.getDidTerminateRecord() && !this.isEof()) {
 				currentRecord = new CsvRecord();
 				records.push(currentRecord);
 			}
@@ -305,12 +313,19 @@ export class CsvParser
 	private readPastSeparatorCharacter(): boolean {
 		let didTerminateRecord = false;
 		let didEncounterNonSeparatorOrNewLine = false;
+		let initialPosition = this._position;
 
 		while(!this.isEof()) {
 			const char = this.peekChar();
 			const isNewLine = this.isNewLine(char);
 			const isSeparator = this.isSeparator(char);
 			const isSeparatorOrNewLine = isSeparator || isNewLine;
+
+			// If our first character being read is the separator, advance and bail out now
+			if (initialPosition === this._position && isSeparator) {
+				this._position++;
+				break;
+			}
 
 			// Consider separators (eg ,) and new lines (record separators) as control characters
 			// Skip past these so that we leave the next parser read starting at a new column (that may start with a quote)
