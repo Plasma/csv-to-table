@@ -6,7 +6,7 @@ Useful when you want to paste CSV related data into an e-mail or Slack room.
 
 ## Quick Start
 
-Select the rows of CSV text (or no selection, to convert the entire document) and then via the command pallette choose __Convert to table from CSV/TSV/PSV__ to have the text replaced with an ASCII formatted table.
+Select the rows of CSV text (or no selection, to convert the entire document) and then via the command palette choose __Convert to table from CSV/TSV/PSV__ to have the text replaced with an ASCII formatted table.
 
 ## Features
 
