@@ -1,5 +1,6 @@
 {
 	"name": "csv-to-table",
+	"icon": "images/icon.png",
 	"displayName": "CSV to Table",
 	"publisher": "phplasma",
 	"description": "Convert a CSV/TSV/PSV file to an ASCII formatted table",
