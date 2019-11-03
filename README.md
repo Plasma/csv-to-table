@@ -12,7 +12,7 @@ Select the rows of CSV text (or no selection, to convert the entire document) an
 
 CSV to Table in action on an example data set.
 
-\!\[Convert to Table\]\(images/demo.gif\)
+![Convert to Table](images/demo.gif)
 
 ## Release Notes
 
