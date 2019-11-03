@@ -73,10 +73,35 @@ export default class CsvParser
 	}
 
 	/**
+	 * Advance our position to the first quote, if one looks to exist amongst leading spaces
+	 */
+	private advanceToQuoteIfLeadingSpaces(): void {
+		for(var i = this._position; i < this._text.length; i++) {
+			const char = this._text[i];
+
+			// If this is a space, continue to next character
+			if (char === ' ') {
+				continue;
+			}
+
+			// If this is a quote, advance our position to this value
+			if (char === '"') {
+				this._position = i;
+			}
+
+			// Break out
+			break;
+		}
+	}
+
+	/**
 	 * Consumes the current character sequence until a column has been read
 	 * Assumes it is starting with a potential quote character
 	 */
 	private readColumn(): CsvColumnResult {
+		// If the column has leading spaces, followed by a quote, then we should jump to the quote character
+		this.advanceToQuoteIfLeadingSpaces();
+
 		// Consume the current character sequence until we have a completed column
 		let startingPosition = this._position;
 		let isInQuote = false;
@@ -190,6 +215,12 @@ export default class CsvParser
 
 			// If this is a quote, and we have not yet seen our separator, continue
 			if (char === '"' && !didEncounterNonSeparatorOrNewLine) {
+				this._position++;
+				continue;
+			}
+
+			// Must have encountered our separator or newline
+			if (!didEncounterNonSeparatorOrNewLine) {
 				this._position++;
 				continue;
 			}

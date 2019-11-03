@@ -8,6 +8,25 @@ import CsvParser from '../../CsvParser';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	test('Can handle leading spaces before quotes in column value', () => {
+		// Arrange
+		const parser = new CsvParser('1, "two" ,"three"', ',');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(1, records.length);
+		assert.equal(3, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal("two", columns[1].getValue());
+		assert.equal("three", columns[2].getValue());
+	});
+
 	test('Can handle blank value in last column', () => {
 		// Arrange
 		const parser = new CsvParser('1,', ',');
