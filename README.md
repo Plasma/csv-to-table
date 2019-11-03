@@ -16,9 +16,7 @@ CSV to Table in action on an example data set.
 
 ## Release Notes
 
-### 1.0.0
-
-Initial release of the extension.
+See Changelog for details of release notes.
 
 ## Attributions
 Icon made by Pixel Perfect (https://www.flaticon.com/authors/pixel-perfect) from www.flaticon.com
