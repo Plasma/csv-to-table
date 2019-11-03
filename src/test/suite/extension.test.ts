@@ -8,6 +8,25 @@ import * as ext from '../../extension';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	test('Can handle blank value in middle column', () => {
+		// Arrange
+		const parser = new ext.CsvParser('1,,3', ',');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(1, records.length);
+		assert.equal(3, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal("", columns[1].getValue());
+		assert.equal("3", columns[2].getValue());
+	});
+
 	test('Can parse simple CSV', () => {
 		// Arrange
 		const parser = new ext.CsvParser('1,2,3', ',');
