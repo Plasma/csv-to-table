@@ -26,10 +26,12 @@
 			{
 				"command": "extension.csv-to-table.csv",
 				"title": "Convert to table from CSV (.csv / commas)"
-			}, {
+			},
+			{
 				"command": "extension.csv-to-table.tsv",
 				"title": "Convert to table from TSV (.tsv / tabs)"
-			}, {
+			},
+			{
 				"command": "extension.csv-to-table.psv",
 				"title": "Convert to table from PSV (.psv / pipes)"
 			}
