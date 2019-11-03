@@ -174,7 +174,7 @@ class TableWriter
 	}
 }
 
-class CsvParser
+export class CsvParser
 {
 	private _text: string;
 	private _separator: string;
