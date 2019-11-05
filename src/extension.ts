@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
  * @param commandName Name of the command we are registering
  */
 function registerCsvToTableCommand(separator: string, commandName: string): vscode.Disposable {
-	let disposable = vscode.commands.registerCommand(commandName, function () {
+	let disposable = vscode.commands.registerCommand(commandName, async function () {
 		// Get the active text editor
 		let editor = vscode.window.activeTextEditor;
 
@@ -43,9 +43,20 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 			let formattedResult = formatter.getFormattedTable(records);
 
 			// Write result
-			editor.edit(editBuilder => {
-				editBuilder.replace(selection, formattedResult);
-			});
+			// Determine if we are going to replace current content, or open a new window
+			const settings = vscode.workspace.getConfiguration('csv-to-table');
+			if (settings.openGeneratedTableInNewEditor) {
+				// Open new window
+				const newDoc = await vscode.workspace.openTextDocument({
+					content: formattedResult
+				});
+				vscode.window.showTextDocument(newDoc, vscode.ViewColumn.Beside);
+			} else {
+				// Edit existing window
+				editor.edit(editBuilder => {
+					editBuilder.replace(selection, formattedResult);
+				});
+			}
 		}
 	});
 

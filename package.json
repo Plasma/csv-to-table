@@ -40,7 +40,17 @@
 				"command": "extension.csv-to-table.ssv",
 				"title": "Convert to table from SSV (.ssv / semicolon)"
 			}
-		]
+		],
+		"configuration": {
+			"title": "CSV to Table",
+			"properties": {
+			  "csv-to-table.openGeneratedTableInNewEditor": {
+				"type": "boolean",
+				"default": true,
+				"description": "Open the generated table in a new editor window, instead of replacing the current editor's content."
+			  }
+			}
+		  }
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
