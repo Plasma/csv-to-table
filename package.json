@@ -18,7 +18,8 @@
 	"activationEvents": [
 		"onCommand:extension.csv-to-table.csv",
 		"onCommand:extension.csv-to-table.tsv",
-		"onCommand:extension.csv-to-table.psv"
+		"onCommand:extension.csv-to-table.psv",
+		"onCommand:extension.csv-to-table.ssv"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -34,6 +35,10 @@
 			{
 				"command": "extension.csv-to-table.psv",
 				"title": "Convert to table from PSV (.psv / pipes)"
+			},
+			{
+				"command": "extension.csv-to-table.ssv",
+				"title": "Convert to table from SSV (.ssv / semicolon)"
 			}
 		]
 	},
