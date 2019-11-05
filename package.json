@@ -4,7 +4,7 @@
 	"displayName": "CSV to Table",
 	"publisher": "phplasma",
 	"description": "Convert a CSV/TSV/PSV file to an ASCII formatted table",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Plasma/csv-to-table.git"
@@ -44,13 +44,13 @@
 		"configuration": {
 			"title": "CSV to Table",
 			"properties": {
-			  "csv-to-table.openGeneratedTableInNewEditor": {
-				"type": "boolean",
-				"default": true,
-				"description": "Open the generated table in a new editor window, instead of replacing the current editor's content."
-			  }
+				"csv-to-table.openGeneratedTableInNewEditor": {
+					"type": "boolean",
+					"default": true,
+					"description": "Open the generated table in a new editor window, instead of replacing the current editor's content."
+				}
 			}
-		  }
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
