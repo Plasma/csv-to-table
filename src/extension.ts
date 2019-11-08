@@ -50,7 +50,7 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 				const newDoc = await vscode.workspace.openTextDocument({
 					content: formattedResult
 				});
-				vscode.window.showTextDocument(newDoc, vscode.ViewColumn.Beside);
+				vscode.window.showTextDocument(newDoc, vscode.ViewColumn.Active);
 			} else {
 				// Edit existing window
 				editor.edit(editBuilder => {
