@@ -19,7 +19,8 @@
 		"onCommand:extension.csv-to-table.csv",
 		"onCommand:extension.csv-to-table.tsv",
 		"onCommand:extension.csv-to-table.psv",
-		"onCommand:extension.csv-to-table.ssv"
+		"onCommand:extension.csv-to-table.ssv",
+		"onCommand:extension.csv-to-table.custom"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -39,6 +40,10 @@
 			{
 				"command": "extension.csv-to-table.ssv",
 				"title": "Convert to table from SSV (.ssv / semicolon)"
+			},
+			{
+				"command": "extension.csv-to-table.custom",
+				"title": "Convert to table from a custom defined separator"
 			}
 		],
 		"configuration": {

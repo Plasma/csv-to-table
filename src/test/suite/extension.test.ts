@@ -100,6 +100,25 @@ suite('Extension Test Suite', () => {
 		assert.equal("3", columns[2].getValue());
 	});
 
+	test('Can parse using space as separator', () => {
+		// Arrange
+		const parser = new CsvParser('1 "quoted with space" 3', ' ');
+
+		// Act
+		const records = parser.getRecords();
+		const record = records[0];
+		const columns = record.getColumns();
+
+		// Assert
+		assert.equal(1, records.length);
+		assert.equal(3, columns.length);
+
+		// Validate records
+		assert.equal("1", columns[0].getValue());
+		assert.equal("quoted with space", columns[1].getValue());
+		assert.equal("3", columns[2].getValue());
+	});
+
 	test('Can parse simple CSV', () => {
 		// Arrange
 		const parser = new CsvParser('1,2,3', ',');

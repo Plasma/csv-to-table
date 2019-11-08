@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import CsvParser from './CsvParser';
 import TableWriter from './TableWriter';
+import { sep } from 'path';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -11,6 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(registerCsvToTableCommand('\t', 'extension.csv-to-table.tsv'));
 	context.subscriptions.push(registerCsvToTableCommand('|', 'extension.csv-to-table.psv'));
 	context.subscriptions.push(registerCsvToTableCommand(';', 'extension.csv-to-table.ssv'));
+	context.subscriptions.push(registerCsvToTableCommand('' /* Custom */, 'extension.csv-to-table.custom'));
 }
 
 /**
@@ -35,8 +37,24 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 			// Get selected text
 			let text = document.getText(selection);
 
+			// Prompt for separator value if unset
+			let separatorToUse = separator;
+			if (separator === '') {
+				const promptResult = await vscode.window.showInputBox({
+					placeHolder: 'Separator character (eg: ,)'
+				});
+
+				// Bail out of user has pressed cancel
+				if (promptResult === '' || promptResult === undefined) {
+					return;
+				}
+
+				// Otherwise update separator
+				separatorToUse = promptResult;
+			}
+
 			// Create parser
-			let parser = new CsvParser(text, separator);
+			let parser = new CsvParser(text, separatorToUse);
 			let records = parser.getRecords();
 
 			let formatter = new TableWriter();
