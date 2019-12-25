@@ -23,7 +23,13 @@ export default class TableWriter
 
 		// Write records
 		for(var i = 0; i < records.length; i++) {
-			const record = records[i];
+			if(i==0){
+				var record = records[i];
+				record = record.toUpperCase();
+			}
+			else{
+				var record = records[i];
+			}
 
 			// Skip empty records
 			if (record.getColumns().length === 0) {
