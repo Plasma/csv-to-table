@@ -9,6 +9,25 @@ import TableWriter from '../../TableWriter';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	test('Can write output using TableWriter (upper-case headers)', () => {
+		// Arrange
+		const parser = new CsvParser('Name,Age\nAndrew,30', ',');
+		const writer = new TableWriter();
+
+		// Act
+		const records = parser.getRecords();
+		const result = writer.getFormattedTable(records, true);
+
+		// Assert
+		assert.equal(`
+|--------|-----|
+| NAME   | AGE |
+|--------|-----|
+| Andrew | 30  |
+|--------|-----|
+	`.trim(), result.replace(/\r?\n/g, "\n").trim());
+	});
+
 	test('Can write output using TableWriter', () => {
 		// Arrange
 		const parser = new CsvParser('Name,Age\nAndrew,30', ',');
@@ -16,7 +35,7 @@ suite('Extension Test Suite', () => {
 
 		// Act
 		const records = parser.getRecords();
-		const result = writer.getFormattedTable(records);
+		const result = writer.getFormattedTable(records, false);
 
 		// Assert
 		assert.equal(`
@@ -25,8 +44,8 @@ suite('Extension Test Suite', () => {
 |--------|-----|
 | Andrew | 30  |
 |--------|-----|
-`.trim(), result.replace(/\r?\n/g, "\n").trim());
-});
+	`.trim(), result.replace(/\r?\n/g, "\n").trim());
+	});
 
 	test('Can handle leading spaces before quotes in column value', () => {
 		// Arrange

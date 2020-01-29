@@ -58,7 +58,7 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 			let records = parser.getRecords();
 
 			let formatter = new TableWriter();
-			let formattedResult = formatter.getFormattedTable(records);
+			let formattedResult = formatter.getFormattedTable(records, false);
 
 			// Write result
 			// Determine if we are going to replace current content, or open a new window

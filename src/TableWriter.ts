@@ -10,13 +10,13 @@ export default class TableWriter
 	 * Return a formatted text table
 	 * @param records Records to be formatted
 	 */
-	public getFormattedTable(records: CsvRecord[]): string {
+	public getFormattedTable(records: CsvRecord[], upperCaseHeader: boolean): string {
 		// Get column lengths
 		const columnLengths = this.getColumnLengths(records);
 
 		// Build separator record
 		const separatorRecord = this.buildSeparatorRecord(columnLengths);
-		const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false);
+		const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false);
 
 		// Build table
 		let result = '';
@@ -31,7 +31,8 @@ export default class TableWriter
 			}
 
 			// Build formatted record
-			const formattedRecord = this.getFormattedRecord(record, columnLengths, true);
+			const upperCaseRecordValue = upperCaseHeader && i === 0;
+			const formattedRecord = this.getFormattedRecord(record, columnLengths, true, upperCaseRecordValue);
 
 			// Write Record Separator
 			result += separatorRecordLine + "\r\n";
@@ -85,7 +86,7 @@ export default class TableWriter
 	 * @param columnLengths Column length map
 	 * @param useValuePadding Whether we are using value padding
 	 */
-	private getFormattedRecord(record: CsvRecord, columnLengths: any[], useValuePadding: boolean): string {
+	private getFormattedRecord(record: CsvRecord, columnLengths: any[], useValuePadding: boolean, upperCaseValue: boolean): string {
 		const columns = record.getColumns();
 		const ValuePadding = useValuePadding ? ' ' : '';
 		const ColumnSeparator = '|';
@@ -96,8 +97,13 @@ export default class TableWriter
 		for(var i = 0; i < columns.length; i++) {
 			// Get column
 			const column = columns[i];
-			const value = column.getValue();
+			let value = column.getValue();
 			const maxLen = columnLengths[i] + ValuePadding.length + ColumnSeparator.length;
+
+			// Upper-case transform this value?
+			if (upperCaseValue) {
+				value = value.toUpperCase();
+			}
 
 			// Calculate left and right padding
 			const rightPaddingLength = maxLen - (ValuePadding.length * 2) - value.length;
