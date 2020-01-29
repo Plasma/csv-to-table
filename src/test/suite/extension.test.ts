@@ -4,9 +4,29 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import CsvParser from '../../CsvParser';
+import TableWriter from '../../TableWriter';
 
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
+
+	test('Can write output using TableWriter', () => {
+		// Arrange
+		const parser = new CsvParser('Name,Age\nAndrew,30', ',');
+		const writer = new TableWriter();
+
+		// Act
+		const records = parser.getRecords();
+		const result = writer.getFormattedTable(records);
+
+		// Assert
+		assert.equal(`
+|--------|-----|
+| Name   | Age |
+|--------|-----|
+| Andrew | 30  |
+|--------|-----|
+`.trim(), result.replace(/\r?\n/g, "\n").trim());
+});
 
 	test('Can handle leading spaces before quotes in column value', () => {
 		// Arrange
