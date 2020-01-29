@@ -53,6 +53,11 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Open the generated table in a new editor window, instead of replacing the current editor's content."
+				},
+				"csv-to-table.upperCaseHeader": {
+					"type": "boolean",
+					"default": false,
+					"description": "Convert the first row's values (header) in the table to upper-case."
 				}
 			}
 		}

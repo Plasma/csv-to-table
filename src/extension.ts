@@ -53,16 +53,18 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 				separatorToUse = promptResult;
 			}
 
+			// Load settings
+			const settings = vscode.workspace.getConfiguration('csv-to-table');
+
 			// Create parser
 			let parser = new CsvParser(text, separatorToUse);
 			let records = parser.getRecords();
 
 			let formatter = new TableWriter();
-			let formattedResult = formatter.getFormattedTable(records, false);
+			let formattedResult = formatter.getFormattedTable(records, settings.upperCaseHeader);
 
 			// Write result
 			// Determine if we are going to replace current content, or open a new window
-			const settings = vscode.workspace.getConfiguration('csv-to-table');
 			if (settings.openGeneratedTableInNewEditor) {
 				// Open new window
 				const newDoc = await vscode.workspace.openTextDocument({
