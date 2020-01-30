@@ -71,13 +71,11 @@ export default class TableWriter
 	 * @param repeat Number of occurrances
 	 */
 	private getRepeatedChar(char: string, repeat: number): string {
-		let result = '';
-
-		for(var i = 0; i < repeat; i++) {
-			result += char;
+		if (repeat <= 0) {
+			return '';
 		}
 
-		return result;
+		return char.repeat(repeat);
 	}
 
 	/**
