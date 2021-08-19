@@ -2,6 +2,11 @@
 
 All notable changes to the "csv-to-table" extension will be documented in this file.
 
+### 1.3.0
+Added support to write the generated table using Markdown format.
+
+This option can be changed via Extension settings.
+
 ### 1.2.3
 Trivial performance improvement during table generation.
 
