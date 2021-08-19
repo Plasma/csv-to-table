@@ -10,7 +10,7 @@ export default class TableWriter
 	 * Return a formatted text table
 	 * @param records Records to be formatted
 	 */
-	public getFormattedTable(records: CsvRecord[], upperCaseHeader: boolean): string {
+	public getFormattedTable(records: CsvRecord[], upperCaseHeader: boolean, useMarkdownFormat: boolean): string {
 		// Get column lengths
 		const columnLengths = this.getColumnLengths(records);
 
@@ -35,14 +35,17 @@ export default class TableWriter
 			const formattedRecord = this.getFormattedRecord(record, columnLengths, true, upperCaseRecordValue);
 
 			// Write Record Separator
-			result += separatorRecordLine + "\r\n";
+			// When using Markdown format, we only want to write this once after the initial header row
+			if (!useMarkdownFormat || i === 1)
+				result += separatorRecordLine + "\r\n";
 
 			// Write Record
 			result += formattedRecord + "\r\n";
 		}
 
-		// Write final ending formatting record
-		result += separatorRecordLine + "\r\n";
+		// Write final ending formatting record (if not using Markdown format)
+		if (!useMarkdownFormat)
+			result += separatorRecordLine + "\r\n";
 
 		// Return result
 		return result;

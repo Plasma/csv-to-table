@@ -9,6 +9,24 @@ import TableWriter from '../../TableWriter';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	test('Can write output using TableWriter (Markdowm output format)', () => {
+		// Arrange
+		const parser = new CsvParser('Name,Age\nAndrew,30\nLisa,35', ',');
+		const writer = new TableWriter();
+
+		// Act
+		const records = parser.getRecords();
+		const result = writer.getFormattedTable(records, false, true);
+
+		// Assert
+		assert.equal(`
+| Name   | Age |
+|--------|-----|
+| Andrew | 30  |
+| Lisa   | 35  |
+	`.trim(), result.replace(/\r?\n/g, "\n").trim());
+	});
+
 	test('Can write output using TableWriter (upper-case headers)', () => {
 		// Arrange
 		const parser = new CsvParser('Name,Age\nAndrew,30', ',');
@@ -16,7 +34,7 @@ suite('Extension Test Suite', () => {
 
 		// Act
 		const records = parser.getRecords();
-		const result = writer.getFormattedTable(records, true);
+		const result = writer.getFormattedTable(records, true, false);
 
 		// Assert
 		assert.equal(`
@@ -35,7 +53,7 @@ suite('Extension Test Suite', () => {
 
 		// Act
 		const records = parser.getRecords();
-		const result = writer.getFormattedTable(records, false);
+		const result = writer.getFormattedTable(records, false, false);
 
 		// Assert
 		assert.equal(`

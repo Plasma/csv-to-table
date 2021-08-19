@@ -58,6 +58,11 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Convert the first row's values (header) in the table to upper-case."
+				},
+				"csv-to-table.markdownFormat": {
+					"type": "boolean",
+					"default": false,
+					"description": "Write the generated table using Markdown format instead of the default style."
 				}
 			}
 		}
