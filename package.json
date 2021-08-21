@@ -18,9 +18,17 @@
 	"activationEvents": [
 		"onCommand:extension.csv-to-table.csv",
 		"onCommand:extension.csv-to-table.tsv",
+		// "onCommand:extension.csv-to-table.excel",
 		"onCommand:extension.csv-to-table.psv",
 		"onCommand:extension.csv-to-table.ssv",
-		"onCommand:extension.csv-to-table.custom"
+		"onCommand:extension.csv-to-table.custom",
+		//markdown
+		"onCommand:extension.csv-to-mdtable.csv",
+		"onCommand:extension.csv-to-mdtable.tsv",
+		// "onCommand:extension.csv-to-mdtable.excel",
+		"onCommand:extension.csv-to-mdtable.psv",
+		"onCommand:extension.csv-to-mdtable.ssv",
+		"onCommand:extension.csv-to-mdtable.custom"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -33,6 +41,10 @@
 				"command": "extension.csv-to-table.tsv",
 				"title": "Convert to table from TSV (.tsv / tabs)"
 			},
+			// {
+			// 	"command": "extension.csv-to-table.excel",
+			// 	"title": "Convert to table from Excel ClipBoard (Excel / tabs)"
+			// },
 			{
 				"command": "extension.csv-to-table.psv",
 				"title": "Convert to table from PSV (.psv / pipes)"
@@ -44,6 +56,31 @@
 			{
 				"command": "extension.csv-to-table.custom",
 				"title": "Convert to table from a custom defined separator"
+			},
+			// markdown
+			{
+				"command": "extension.csv-to-mdtable.csv",
+				"title": "Convert to Markdown table from CSV (.csv / commas)"
+			},
+			{
+				"command": "extension.csv-to-mdtable.tsv",
+				"title": "Convert to Markdown table from TSV (.tsv / tabs)"
+			},
+			// {
+			// 	"command": "extension.csv-to-table.excel",
+			// 	"title": "Convert to Markdown table from Excel ClipBoard (Excel / tabs)"
+			// },
+			{
+				"command": "extension.csv-to-mdtable.psv",
+				"title": "Convert to Markdown table from PSV (.psv / pipes)"
+			},
+			{
+				"command": "extension.csv-to-mdtable.ssv",
+				"title": "Convert to Markdown table from SSV (.ssv / semicolon)"
+			},
+			{
+				"command": "extension.csv-to-mdtable.custom",
+				"title": "Convert to Markdown table from a custom defined separator"
 			}
 		],
 		"configuration": {
@@ -58,12 +95,12 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Convert the first row's values (header) in the table to upper-case."
-				},
+				} /* ,
 				"csv-to-table.markdownFormat": {
 					"type": "boolean",
 					"default": false,
 					"description": "Write the generated table using Markdown format instead of the default style."
-				}
+				} */
 			}
 		}
 	},

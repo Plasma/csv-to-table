@@ -8,11 +8,17 @@ import { sep } from 'path';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	context.subscriptions.push(registerCsvToTableCommand(',', 'extension.csv-to-table.csv'));
-	context.subscriptions.push(registerCsvToTableCommand('\t', 'extension.csv-to-table.tsv'));
-	context.subscriptions.push(registerCsvToTableCommand('|', 'extension.csv-to-table.psv'));
-	context.subscriptions.push(registerCsvToTableCommand(';', 'extension.csv-to-table.ssv'));
-	context.subscriptions.push(registerCsvToTableCommand('' /* Custom */, 'extension.csv-to-table.custom'));
+	context.subscriptions.push(registerCsvToTableCommand(',', false, 'extension.csv-to-table.csv'));
+	context.subscriptions.push(registerCsvToTableCommand('\t', false, 'extension.csv-to-table.tsv'));
+	context.subscriptions.push(registerCsvToTableCommand('|', false, 'extension.csv-to-table.psv'));
+	context.subscriptions.push(registerCsvToTableCommand(';', false, 'extension.csv-to-table.ssv'));
+	context.subscriptions.push(registerCsvToTableCommand('' /* Custom */, false, 'extension.csv-to-table.custom'));
+
+	context.subscriptions.push(registerCsvToTableCommand(',', true, 'extension.csv-to-mdtable.csv'));
+	context.subscriptions.push(registerCsvToTableCommand('\t', true, 'extension.csv-to-mdtable.tsv'));
+	context.subscriptions.push(registerCsvToTableCommand('|', true, 'extension.csv-to-mdtable.psv'));
+	context.subscriptions.push(registerCsvToTableCommand(';', true, 'extension.csv-to-mdtable.ssv'));
+	context.subscriptions.push(registerCsvToTableCommand('' /* Custom */, true, 'extension.csv-to-mdtable.custom'));
 }
 
 /**
@@ -20,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
  * @param separator Separator to register
  * @param commandName Name of the command we are registering
  */
-function registerCsvToTableCommand(separator: string, commandName: string): vscode.Disposable {
+function registerCsvToTableCommand(separator: string, md: boolean, commandName: string): vscode.Disposable {
 	let disposable = vscode.commands.registerCommand(commandName, async function () {
 		// Get the active text editor
 		let editor = vscode.window.activeTextEditor;
@@ -61,7 +67,7 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 			let records = parser.getRecords();
 
 			let formatter = new TableWriter();
-			let formattedResult = formatter.getFormattedTable(records, settings.upperCaseHeader, settings.markdownFormat);
+			let formattedResult = formatter.getFormattedTable(records, settings.upperCaseHeader, md);
 
 			// Write result
 			// Determine if we are going to replace current content, or open a new window
@@ -84,4 +90,4 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
