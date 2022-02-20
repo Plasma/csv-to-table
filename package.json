@@ -1,9 +1,9 @@
 {
 	"name": "csv-to-table",
 	"icon": "images/icon.png",
-	"displayName": "CSV to Table",
+	"displayName": "CSV/TSV/PSV to ASCII/ MarkDwon Table",
 	"publisher": "phplasma",
-	"description": "Convert a CSV/TSV/PSV file to an ASCII formatted table",
+	"description": "Convert a CSV/TSV/PSV file to an ASCII formatted or MarkDown style table",
 	"version": "1.3.0",
 	"repository": {
 		"type": "git",
