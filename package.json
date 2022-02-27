@@ -4,7 +4,7 @@
 	"displayName": "CSV to Table",
 	"publisher": "phplasma",
 	"description": "Convert a CSV/TSV/PSV file to an ASCII formatted table",
-	"version": "1.3.0",
+	"version": "1.4.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Plasma/csv-to-table.git"
@@ -63,6 +63,11 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Write the generated table using Markdown format instead of the default style."
+				},
+				"csv-to-table.rightAlignNumbers": {
+					"type": "boolean",
+					"default": true,
+					"description": "Align cell values that are numbers to the right side for easy comparison between other row values."
 				}
 			}
 		}

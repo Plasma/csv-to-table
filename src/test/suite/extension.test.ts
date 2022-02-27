@@ -9,6 +9,58 @@ import TableWriter from '../../TableWriter';
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
+	test('Can handle empty right aligned cell value', () => {
+		// Arrange
+		const parser = new CsvParser('2022,Name,Value\n"","",""', ',');
+		const writer = new TableWriter();
+
+		// Act
+		const records = parser.getRecords();
+		const result = writer.getFormattedTable(records, false, false, true);
+
+		console.log(result);
+
+		// Assert
+		assert.equal(`
+|------|------|-------|
+| 2022 | Name | Value |
+|------|------|-------|
+|      |      |       |
+|------|------|-------|
+`.trim(), result.replace(/\r?\n/g, "\n").trim());
+	});
+
+	test('Can right align cell values that contain numbers', () => {
+		// Arrange
+		const parser = new CsvParser('2022,Name,Value\nExample Value,Andrew,12345.67\nTest Value,Lisa,35\n123,John,"19.600,12"\nABC,Megan,"12.34,56"\n55,Alex,"1,234"\n-1,Plus Minus,+1.50', ',');
+		const writer = new TableWriter();
+
+		// Act
+		const records = parser.getRecords();
+		const result = writer.getFormattedTable(records, false, false, true);
+
+		console.log(result);
+
+		// Assert
+		assert.equal(`
+|---------------|------------|-----------|
+|          2022 | Name       | Value     |
+|---------------|------------|-----------|
+| Example Value | Andrew     |  12345.67 |
+|---------------|------------|-----------|
+| Test Value    | Lisa       |        35 |
+|---------------|------------|-----------|
+|           123 | John       | 19.600,12 |
+|---------------|------------|-----------|
+| ABC           | Megan      |  12.34,56 |
+|---------------|------------|-----------|
+|            55 | Alex       |     1,234 |
+|---------------|------------|-----------|
+|            -1 | Plus Minus |     +1.50 |
+|---------------|------------|-----------|
+`.trim(), result.replace(/\r?\n/g, "\n").trim());
+	});
+
 	test('Can write output using TableWriter (Markdowm output format)', () => {
 		// Arrange
 		const parser = new CsvParser('Name,Age\nAndrew,30\nLisa,35', ',');
@@ -16,7 +68,7 @@ suite('Extension Test Suite', () => {
 
 		// Act
 		const records = parser.getRecords();
-		const result = writer.getFormattedTable(records, false, true);
+		const result = writer.getFormattedTable(records, false, true, false);
 
 		// Assert
 		assert.equal(`
@@ -34,7 +86,7 @@ suite('Extension Test Suite', () => {
 
 		// Act
 		const records = parser.getRecords();
-		const result = writer.getFormattedTable(records, true, false);
+		const result = writer.getFormattedTable(records, true, false, false);
 
 		// Assert
 		assert.equal(`
@@ -53,7 +105,7 @@ suite('Extension Test Suite', () => {
 
 		// Act
 		const records = parser.getRecords();
-		const result = writer.getFormattedTable(records, false, false);
+		const result = writer.getFormattedTable(records, false, false, false);
 
 		// Assert
 		assert.equal(`

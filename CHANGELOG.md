@@ -2,6 +2,11 @@
 
 All notable changes to the "csv-to-table" extension will be documented in this file.
 
+### 1.4.0
+Added support for right-aligning numeric values in table cells.
+
+This option can be changed via Extension settings, and is enabled by default.
+
 ### 1.3.0
 Added support to write the generated table using Markdown format.
 

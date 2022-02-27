@@ -1,3 +1,4 @@
+import { isNumber } from 'util';
 import CsvColumn from './CsvColumn';
 import CsvRecord from './CsvRecord';
 
@@ -10,13 +11,13 @@ export default class TableWriter
 	 * Return a formatted text table
 	 * @param records Records to be formatted
 	 */
-	public getFormattedTable(records: CsvRecord[], upperCaseHeader: boolean, useMarkdownFormat: boolean): string {
+	public getFormattedTable(records: CsvRecord[], upperCaseHeader: boolean, useMarkdownFormat: boolean, rightAlignNumbers: boolean): string {
 		// Get column lengths
 		const columnLengths = this.getColumnLengths(records);
 
 		// Build separator record
 		const separatorRecord = this.buildSeparatorRecord(columnLengths);
-		const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false);
+		const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false, rightAlignNumbers);
 
 		// Build table
 		let result = '';
@@ -32,7 +33,7 @@ export default class TableWriter
 
 			// Build formatted record
 			const upperCaseRecordValue = upperCaseHeader && i === 0;
-			const formattedRecord = this.getFormattedRecord(record, columnLengths, true, upperCaseRecordValue);
+			const formattedRecord = this.getFormattedRecord(record, columnLengths, true, upperCaseRecordValue, rightAlignNumbers);
 
 			// Write Record Separator
 			// When using Markdown format, we only want to write this once after the initial header row
@@ -87,7 +88,7 @@ export default class TableWriter
 	 * @param columnLengths Column length map
 	 * @param useValuePadding Whether we are using value padding
 	 */
-	private getFormattedRecord(record: CsvRecord, columnLengths: any[], useValuePadding: boolean, upperCaseValue: boolean): string {
+	private getFormattedRecord(record: CsvRecord, columnLengths: any[], useValuePadding: boolean, upperCaseValue: boolean, rightAlignNumbers: boolean): string {
 		const columns = record.getColumns();
 		const ValuePadding = useValuePadding ? ' ' : '';
 		const ColumnSeparator = '|';
@@ -107,7 +108,9 @@ export default class TableWriter
 			}
 
 			// Calculate left and right padding
-			const rightPaddingLength = maxLen - (ValuePadding.length * 2) - value.length;
+			const isRightAligned = rightAlignNumbers && this.isNumberValue(value);
+			const leftPaddingLength = useValuePadding ? (isRightAligned ? maxLen - value.length - 1 : 1) : 0;
+			const rightPaddingLength = isRightAligned ? 0 : maxLen - (ValuePadding.length * 2) - value.length;
 
 			// Start with column separator?
 			if (i === 0) {
@@ -115,7 +118,7 @@ export default class TableWriter
 			}
 
 			// Write left padding
-			result += ValuePadding;
+			result += this.getRepeatedChar(' ', leftPaddingLength);
 
 			// Write value
 			result += value;
@@ -154,5 +157,34 @@ export default class TableWriter
 		}
 
 		return columnLengths;
+	}
+
+	/**
+	 * Determine if the provided cell value appears to be a number
+	 * @param value string value to analyze
+	 */
+	private isNumberValue(value: string): boolean {
+		// Early return
+		if (value.length === 0)
+			return false;
+
+		// Look for number-like characters
+		for(let i = 0; i < value.length; i++) {
+			const char = value[i];
+
+			// Check for number signs
+			if (char === '+' || char === '-' || char === ',' || char === '.')
+				continue;
+
+			// Check for digits
+			if (char >= '0' && char <= '9')
+				continue;
+
+			// Not a number
+			return false;
+		}
+
+		// Appears to be a number
+		return true;
 	}
 }
