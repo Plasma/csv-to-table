@@ -85,7 +85,7 @@
 		"@types/node": "^10.17.60",
 		"@types/vscode": "^1.39.0",
 		"glob": "^7.2.0",
-		"minimist": "^1.2.5",
+		"minimist": "^1.2.6",
 		"mkdirp": "^1.0.4",
 		"mocha": "^9.2.0",
 		"tslint": "^5.20.1",
