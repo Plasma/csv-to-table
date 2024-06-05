@@ -68,7 +68,8 @@ function registerCsvToTableCommand(separator: string, commandName: string): vsco
 			if (settings.openGeneratedTableInNewEditor) {
 				// Open new window
 				const newDoc = await vscode.workspace.openTextDocument({
-					content: formattedResult
+					content: formattedResult,
+					language: 'csv (pipe)'
 				});
 				vscode.window.showTextDocument(newDoc, vscode.ViewColumn.Active);
 			} else {
