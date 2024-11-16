@@ -2,6 +2,9 @@
 
 All notable changes to the "csv-to-table" extension will be documented in this file.
 
+### 1.4.1
+Updated dependencies
+
 ### 1.4.0
 Added support for right-aligning numeric values in table cells.
 
