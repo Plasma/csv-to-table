@@ -436,4 +436,32 @@ suite('Extension Test Suite', () => {
 		assert.equal("c", columns2[0].getValue());
 		assert.equal("quoted", columns2[1].getValue());
 	});
+
+	test('The width of East Asian character is 2', () => {
+		// Arrange
+		const parser = new CsvParser(`\
+origin name,english name
+메이플스토리,MapleStory
+スーパーマリオ,Super Mario
+League Of Legends,League Of Legends
+`, ',');
+		const writer = new TableWriter();
+
+		// Act
+		const records = parser.getRecords();
+		const result = writer.getFormattedTable(records, false, false, false);
+
+		// Assert
+		assert.equal(`
+|-------------------|-------------------|
+| origin name       | english name      |
+|-------------------|-------------------|
+| 메이플스토리      | MapleStory        |
+|-------------------|-------------------|
+| スーパーマリオ    | Super Mario       |
+|-------------------|-------------------|
+| League Of Legends | League Of Legends |
+|-------------------|-------------------|
+`.trim(), result.replace(/\r?\n/g, "\n").trim());
+	});
 });
