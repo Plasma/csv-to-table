@@ -84,6 +84,7 @@
 		"@types/mocha": "^10.0.1",
 		"@types/node": "^20.5.0",
 		"@types/vscode": "^1.79.0",
+		"eastasianwidth": "^0.3.0",
 		"glob": "^8.1.0",
 		"minimist": "^1.2.7",
 		"mkdirp": "^1.0.4",

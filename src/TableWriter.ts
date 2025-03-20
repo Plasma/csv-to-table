@@ -1,6 +1,7 @@
 import { isNumber } from 'util';
 import CsvColumn from './CsvColumn';
 import CsvRecord from './CsvRecord';
+import * as eaw from 'eastasianwidth';
 
 /**
  * Class resposible for rendering a provided list of CsvRecord's into an ASCII table
@@ -109,8 +110,9 @@ export default class TableWriter
 
 			// Calculate left and right padding
 			const isRightAligned = rightAlignNumbers && this.isNumberValue(value);
-			const leftPaddingLength = useValuePadding ? (isRightAligned ? maxLen - value.length - 1 : 1) : 0;
-			const rightPaddingLength = isRightAligned ? 0 : maxLen - (ValuePadding.length * 2) - value.length;
+			const stringWidth = eaw.length(value);
+			const leftPaddingLength = useValuePadding ? (isRightAligned ? maxLen - stringWidth - 1 : 1) : 0;
+			const rightPaddingLength = isRightAligned ? 0 : maxLen - (ValuePadding.length * 2) - stringWidth;
 
 			// Start with column separator?
 			if (i === 0) {
@@ -147,8 +149,8 @@ export default class TableWriter
 			const record = records[i];
 			const columns = record.getColumns();
 
-			for(var colIndex = 0; colIndex < columns.length; colIndex++) {
-				const len = columns[colIndex].getValue().length;
+			for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+				const len = eaw.length(columns[colIndex].getValue());
 
 				if (columnLengths[colIndex] === undefined || len > columnLengths[colIndex]) {
 					columnLengths[colIndex] = len;
@@ -169,7 +171,7 @@ export default class TableWriter
 			return false;
 
 		// Look for number-like characters
-		for(let i = 0; i < value.length; i++) {
+		for (let i = 0; i < value.length; i++) {
 			const char = value[i];
 
 			// Check for number signs
