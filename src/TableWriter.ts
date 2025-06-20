@@ -15,10 +15,6 @@ export default class TableWriter
 		// Get column lengths
 		const columnLengths = this.getColumnLengths(records);
 
-		// Build separator record
-		const separatorRecord = this.buildSeparatorRecord(columnLengths);
-		const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false, rightAlignNumbers);
-
 		// Build table
 		let result = '';
 
@@ -33,20 +29,34 @@ export default class TableWriter
 
 			// Build formatted record
 			const upperCaseRecordValue = upperCaseHeader && i === 0;
-			const formattedRecord = this.getFormattedRecord(record, columnLengths, true, upperCaseRecordValue, rightAlignNumbers);
+			const formattedRecord = this.getFormattedRecord(record, columnLengths, true, upperCaseRecordValue, rightAlignNumbers, useMarkdownFormat ? '|' : '│');
 
 			// Write Record Separator
 			// When using Markdown format, we only want to write this once after the initial header row
-			if (!useMarkdownFormat || i === 1)
+			if (useMarkdownFormat && i === 1) {
+				// Build separator record
+				const separatorRecord = this.buildSeparatorRecord(columnLengths, '-');
+				const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false, rightAlignNumbers, '|');
 				result += separatorRecordLine + "\r\n";
+			}
+
+			if(!useMarkdownFormat) {
+				const separatorRecord = this.buildSeparatorRecord(columnLengths, '─');
+				const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false, rightAlignNumbers, i === 0 ? '┬' : '┼');
+				result += separatorRecordLine + "\r\n";
+			}
+
 
 			// Write Record
 			result += formattedRecord + "\r\n";
 		}
 
 		// Write final ending formatting record (if not using Markdown format)
-		if (!useMarkdownFormat)
+		if (!useMarkdownFormat) {
+			const separatorRecord = this.buildSeparatorRecord(columnLengths, '─');
+			const separatorRecordLine = this.getFormattedRecord(separatorRecord, columnLengths, false, false, rightAlignNumbers, '┴');
 			result += separatorRecordLine + "\r\n";
+		}
 
 		// Return result
 		return result;
@@ -56,12 +66,12 @@ export default class TableWriter
 	 * Returns a CsvRecord that is suitable as a row separator
 	 * @param columnLengths Column length map
 	 */
-	private buildSeparatorRecord(columnLengths: any[]): CsvRecord {
+	private buildSeparatorRecord(columnLengths: number[], LineSeparator: string): CsvRecord {
 		const record = new CsvRecord();
 
 		for(var i = 0; i < columnLengths.length; i++) {
 			const colLength = columnLengths[i] + 2;
-			const value = this.getRepeatedChar('-', colLength);
+			const value = this.getRepeatedChar(LineSeparator, colLength);
 
 			record.addColumn(new CsvColumn(value));
 		}
@@ -88,10 +98,9 @@ export default class TableWriter
 	 * @param columnLengths Column length map
 	 * @param useValuePadding Whether we are using value padding
 	 */
-	private getFormattedRecord(record: CsvRecord, columnLengths: any[], useValuePadding: boolean, upperCaseValue: boolean, rightAlignNumbers: boolean): string {
+	private getFormattedRecord(record: CsvRecord, columnLengths: number[], useValuePadding: boolean, upperCaseValue: boolean, rightAlignNumbers: boolean, ColumnSeparator: string): string {
 		const columns = record.getColumns();
 		const ValuePadding = useValuePadding ? ' ' : '';
-		const ColumnSeparator = '|';
 
 		let result = '';
 
@@ -140,7 +149,7 @@ export default class TableWriter
 	 * Calculate the maximum column lengths based on the provided Record set
 	 * @param records Record data to analyze
 	 */
-	private getColumnLengths(records: CsvRecord[]): any[] {
+	private getColumnLengths(records: CsvRecord[]): number[] {
 		// Calculate column lengths
 		let columnLengths = [];
 		for(var i = 0; i < records.length; i++) {
